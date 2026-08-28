@@ -1,0 +1,105 @@
+/* =================================
+   Eitaa Web App Initialization
+================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Check if Eitaa WebApp is available
+    if (window.Eitaa && Eitaa.WebApp) {
+
+        // Tell Eitaa that the Web App is ready
+        Eitaa.WebApp.ready();
+
+        // Expand the Web App
+        Eitaa.WebApp.expand();
+    }
+
+
+    /* ================================
+       Provider Button
+    ================================= */
+
+    const providerBtn =
+        document.getElementById("providerBtn");
+
+    providerBtn.addEventListener("click", function () {
+
+        console.log("Provider selected");
+
+        // Haptic feedback
+        if (window.Eitaa && Eitaa.WebApp) {
+
+            Eitaa.WebApp.HapticFeedback.impactOccurred(
+                "light"
+            );
+        }
+
+        // For now:
+        // Go to provider chatbot
+
+        window.location.href = "provider.html";
+    });
+
+
+    /* ================================
+       Receiver Button
+    ================================= */
+
+    const receiverBtn =
+        document.getElementById("receiverBtn");
+
+    receiverBtn.addEventListener("click", function () {
+
+        console.log("Receiver selected");
+
+        // Haptic feedback
+        if (window.Eitaa && Eitaa.WebApp) {
+
+            Eitaa.WebApp.HapticFeedback.impactOccurred(
+                "light"
+            );
+        }
+
+        // For now:
+        // Go to receiver chatbot
+
+        window.location.href = "receiver.html";
+    });
+
+
+    /* ================================
+       Support Button
+    ================================= */
+
+    const supportBtn =
+        document.getElementById("supportBtn");
+
+    supportBtn.addEventListener("click", function () {
+
+        console.log("Support selected");
+
+        if (window.Eitaa && Eitaa.WebApp) {
+
+            Eitaa.WebApp.HapticFeedback.impactOccurred(
+                "light"
+            );
+
+            /*
+             * Later we can replace this with
+             * the actual Eitaa support link.
+             */
+
+            Eitaa.WebApp.showAlert(
+                "بخش پشتیبانی به‌زودی فعال خواهد شد."
+            );
+
+        } else {
+
+            alert(
+                "بخش پشتیبانی به‌زودی فعال خواهد شد."
+            );
+        }
+
+    });
+
+});
