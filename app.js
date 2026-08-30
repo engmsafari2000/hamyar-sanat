@@ -58,18 +58,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     window.location.href =
                     "provider/index.html";
 
-
                 }
 
-                else{
+                window.location.href = "provider/index.html";
 
-
-                    Eitaa.WebApp.showAlert(
-                    "برای ثبت خدمات، لطفاً شماره تلفن خود را تأیید کنید."
-                    );
-
-
-                }
 
 
             }
