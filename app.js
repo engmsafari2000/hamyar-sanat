@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ================================
    Provider Button
 ================================ */
-```javascript
+
 /* ================================
    Provider Button
 ================================ */
-```javascript
+
 /* ================================
    Provider Button
 ================================ */
@@ -100,7 +100,7 @@ providerBtn.addEventListener("click", function () {
     }
 
 });
-```
+
 
     /* ================================
        Receiver Button
