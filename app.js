@@ -21,66 +21,55 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ================================
    Provider Button
 ================================ */
-
-const providerBtn =
-    document.getElementById("providerBtn");
-
+const providerBtn = document.getElementById("providerBtn");
 
 providerBtn.addEventListener("click", function () {
 
     console.log("Provider selected");
 
-
-    if (window.Eitaa && Eitaa.WebApp) {
+    if (window.Eitaa && window.Eitaa.WebApp) {
 
         // لرزش
-        Eitaa.WebApp.HapticFeedback
+        window.Eitaa.WebApp.HapticFeedback
             .impactOccurred("light");
 
-
         // درخواست شماره تماس
-        Eitaa.WebApp.requestContact(
-            function (success, contact) {
+        window.Eitaa.WebApp.requestContact(
+            function (success, data) {
 
-                console.log(
-                    "Contact success:",
-                    success
-                );
+                console.log("Contact success:", success);
+                console.log("Contact data:", data);
+                console.log("Contact response:", data?.response);
 
-                console.log(
-                    "Contact data:",
-                    contact
-                );
+                if (success && data?.response) {
 
+                    // ذخیره شماره/اطلاعات تماس در یک متغیر
+                    const phoneNumber = data.response;
 
-                if (success) {
+                    console.log("Phone number:", phoneNumber);
 
-                    // ذخیره کل اطلاعات تماس
+                    // ذخیره در localStorage
                     localStorage.setItem(
-                        "eitaaContact",
-                        JSON.stringify(contact)
+                        "eitaaPhone",
+                        phoneNumber
                     );
 
-
-                    // رفتن به فرم خدمات دهنده
+                    // رفتن به فرم خدمات‌دهنده
                     window.location.href =
                         "provider/index.html";
 
                 } else {
 
-                    Eitaa.WebApp.showAlert(
+                    console.log("Contact request was cancelled or failed.");
+
+                    window.Eitaa.WebApp.showAlert(
                         "دریافت شماره تلفن لغو شد."
                     );
-
                 }
-
             }
         );
-
     }
-
 });
-
     /* ================================
        Receiver Button
     ================================= */
