@@ -30,6 +30,37 @@ const modalMessage =
 const modalCloseBtn =
     document.getElementById("modalCloseBtn");
 
+// =====================================
+// Load hidden Eitaa phone
+// =====================================
+
+
+// =====================================
+// Get Eitaa Contact Data
+// =====================================
+
+const eitaaPhoneInput =
+    document.getElementById("eitaaPhone");
+
+
+const savedContact =
+    localStorage.getItem("eitaaContact");
+
+
+if (savedContact) {
+
+    const contactData =
+        JSON.parse(savedContact);
+
+
+    console.log(
+        "Eitaa contact in provider page:",
+        contactData
+    );
+
+}
+
+
 
 // =====================================
 // Show Modal Function
