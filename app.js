@@ -14,15 +14,15 @@ document.addEventListener("DOMContentLoaded", function () {
         Eitaa.WebApp.expand();
     }
 
+/* ================================
+   Provider Button
+================================ */
 
-    /* ================================
-       Provider Button
-    ================================= */
+const providerBtn =
+    document.getElementById("providerBtn");
 
-    const providerBtn =
-        document.getElementById("providerBtn");
 
-   providerBtn.addEventListener("click", function () {
+providerBtn.addEventListener("click", function () {
 
 
     console.log("Provider selected");
@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // لرزش کوتاه ایتا
     if(window.Eitaa && Eitaa.WebApp){
 
+
         Eitaa.WebApp.HapticFeedback
         .impactOccurred("light");
 
@@ -38,45 +39,57 @@ document.addEventListener("DOMContentLoaded", function () {
         // درخواست شماره تلفن فقط برای خدمات دهنده
 
         Eitaa.WebApp.requestContact(
-            function(status){
+
+            function(contact){
 
 
                 console.log(
-                    "Contact status:",
-                    status
+                    "Contact:",
+                    contact
                 );
 
 
                 /*
-                  اگر کاربر اجازه داد
-                  وارد بخش خدمات دهنده شود
+                  ذخیره شماره موبایل ایتا
+                  برای صفحه فرم خدمات دهنده
                 */
 
-                if(status === "sent"){
 
+                if(contact && contact.phone_number){
+
+
+                    localStorage.setItem(
+                        "providerPhone",
+                        contact.phone_number
+                    );
+
+
+                    // رفتن به فرم خدمات دهنده
 
                     window.location.href =
                     "provider/index.html";
 
-                }
-                else{
-
-
-                  window.location.href = "provider/index.html";
-
 
                 }
-                
 
+                else {
+
+
+                    Eitaa.WebApp.showAlert(
+                    "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
+                    );
+
+
+                }
 
 
             }
+
         );
 
 
     }
 
-    
 
 });
 
