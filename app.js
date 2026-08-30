@@ -74,10 +74,11 @@ providerBtn.addEventListener("click", function () {
 
                 else {
 
+                     window.location.href ="provider/index.html";
 
-                    Eitaa.WebApp.showAlert(
-                    "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
-                    );
+                  //Eitaa.WebApp.showAlert(
+                  //  "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
+                  //  );
 
 
                 }
