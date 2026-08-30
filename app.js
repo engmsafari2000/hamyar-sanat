@@ -21,55 +21,87 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ================================
    Provider Button
 ================================ */
-const providerBtn = document.getElementById("providerBtn");
+```javascript
+/* ================================
+   Provider Button
+================================ */
+
+const providerBtn =
+    document.getElementById("providerBtn");
+
 
 providerBtn.addEventListener("click", function () {
 
     console.log("Provider selected");
 
-    if (window.Eitaa && window.Eitaa.WebApp) {
 
-        // لرزش
-        window.Eitaa.WebApp.HapticFeedback
+    // بررسی وجود Eitaa WebApp
+    if (window.Eitaa && Eitaa.WebApp) {
+
+        // لرزش کوتاه
+        Eitaa.WebApp.HapticFeedback
             .impactOccurred("light");
 
-        // درخواست شماره تماس
-        window.Eitaa.WebApp.requestContact(
-            function (success, data) {
 
-                console.log("Contact success:", success);
-                console.log("Contact data:", data);
-                console.log("Contact response:", data?.response);
+        // درخواست شماره موبایل
+        Eitaa.WebApp.requestContact(
 
-                if (success && data?.response) {
+            function (success, contactData) {
 
-                    // ذخیره شماره/اطلاعات تماس در یک متغیر
-                    const phoneNumber = data.response;
+                console.log(
+                    "Contact success:",
+                    success
+                );
 
-                    console.log("Phone number:", phoneNumber);
+                console.log(
+                    "Contact data:",
+                    contactData
+                );
 
-                    // ذخیره در localStorage
+
+                // اگر کاربر شماره را تأیید کرد
+                if (success) {
+
+                    /*
+                     * فعلاً کل contactData را ذخیره می‌کنیم
+                     * تا ساختار دقیق اطلاعات ایتا مشخص شود.
+                     */
+
                     localStorage.setItem(
-                        "eitaaPhone",
-                        phoneNumber
+                        "eitaaContact",
+                        JSON.stringify(contactData)
                     );
+
+
+                    console.log(
+                        "Saved contact:",
+                        localStorage.getItem("eitaaContact")
+                    );
+
 
                     // رفتن به فرم خدمات‌دهنده
                     window.location.href =
                         "provider/index.html";
 
-                } else {
-
-                    console.log("Contact request was cancelled or failed.");
-
-                    window.Eitaa.WebApp.showAlert(
-                        "دریافت شماره تلفن لغو شد."
-                    );
                 }
+
+                else {
+
+                    Eitaa.WebApp.showAlert(
+                        "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
+                    );
+
+                }
+
             }
+
         );
+
     }
+
 });
+```
+
     /* ================================
        Receiver Button
     ================================= */
