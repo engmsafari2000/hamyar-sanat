@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // For now:
         // Go to provider chatbot
 
-        window.location.href = "provider.html";
+        window.location.href = "provider/index.html";
     });
 
 
