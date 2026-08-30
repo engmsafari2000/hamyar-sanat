@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>همیار صنعت | ثبت خدمات صنعتی</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+    <div class="page-container">
+
+        <form id="serviceForm">
+
+            <!-- عنوان فرم -->
+            <div class="form-header">
+
+                <h1>فرم ثبت خدمات صنعتی</h1>
+
+                <p>
+                    اطلاعات واحد خدماتی
+                </p>
+
+            </div>
+
+
+            <!-- نام شخص یا واحد تولیدی -->
+
+            <div class="form-group">
+
+                <label for="name">
+                    نام شخص یا واحد تولیدی
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                >
+
+            </div>
+
+
+
+            <!-- آدرس -->
+
+            <div class="form-group">
+
+                <label for="address">
+                    آدرس
+                </label>
+
+                <input
+                    type="text"
+                    id="address"
+                    name="address"
+                >
+
+            </div>
+
+
+
+            <!-- تلفن -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    تلفن
+                    <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="phone"
+                    name="phone"
+                    required
+                ></textarea>
+
+            </div>
+
+
+
+            <!-- زمینه فعالیت -->
+
+            <div class="form-group">
+
+                <label for="activity">
+                    زمینه فعالیت
+                    <span class="required">*</span>
+                </label>
+
+                <select
+                    id="activity"
+                    name="activity"
+                    required
+                >
+
+                    <option value="">
+                        انتخاب کنید...
+                    </option>
+
+                    <option value="machining">
+                        اعلام ظرفیت خالی تراش و فرز
+                    </option>
+
+                    <option value="welding">
+                        خدمات جوشکاری
+                    </option>
+
+                    <option value="casting">
+                        خدمات ریخته‌گری
+                    </option>
+
+                    <option value="other">
+                        سایر خدمات صنعتی
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- ============================
+                 Dynamic Fields
+            ============================= -->
+
+            <div
+                id="dynamicFields"
+                class="dynamic-fields"
+            >
+
+                <!-- JavaScript Fields Here -->
+
+            </div>
+
+
+
+            <!-- Submit -->
+
+            <button
+                type="submit"
+                class="submit-button"
+            >
+                ثبت اطلاعات
+            </button>
+
+
+        </form>
+
+    </div>
+
+<!-- Modal پیام -->
+<div id="messageModal" class="modal">
+
+    <div class="modal-content">
+
+        <div id="modalIcon" class="modal-icon">
+            ✓
+        </div>
+
+        <h3 id="modalTitle">
+            پیام
+        </h3>
+
+        <p id="modalMessage">
+        </p>
+
+        <button
+            type="button"
+            id="modalCloseBtn"
+            class="modal-close-btn"
+        >
+            متوجه شدم
+        </button>
+
+    </div>
+
+</div>
+    <script src="app.js"></script>
+
+</body>
+
+</html>
