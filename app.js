@@ -22,24 +22,71 @@ document.addEventListener("DOMContentLoaded", function () {
     const providerBtn =
         document.getElementById("providerBtn");
 
-    providerBtn.addEventListener("click", function () {
+   providerBtn.addEventListener("click", function () {
 
-        console.log("Provider selected");
 
-        // Haptic feedback
-        if (window.Eitaa && Eitaa.WebApp) {
+    console.log("Provider selected");
 
-            Eitaa.WebApp.HapticFeedback.impactOccurred(
-                "light"
-            );
-        }
 
-        // For now:
-        // Go to provider chatbot
+    // لرزش کوتاه ایتا
+    if(window.Eitaa && Eitaa.WebApp){
 
-        window.location.href = "provider/index.html";
-    });
+        Eitaa.WebApp.HapticFeedback
+        .impactOccurred("light");
 
+
+        // درخواست شماره تلفن فقط برای خدمات دهنده
+
+        Eitaa.WebApp.requestContact(
+            function(status){
+
+
+                console.log(
+                    "Contact status:",
+                    status
+                );
+
+
+                /*
+                  اگر کاربر اجازه داد
+                  وارد بخش خدمات دهنده شود
+                */
+
+                if(status === "sent"){
+
+
+                    window.location.href =
+                    "provider/index.html";
+
+
+                }
+
+                else{
+
+
+                    Eitaa.WebApp.showAlert(
+                    "برای ثبت خدمات، لطفاً شماره تلفن خود را تأیید کنید."
+                    );
+
+
+                }
+
+
+            }
+        );
+
+
+    }
+
+    else {
+
+        window.location.href =
+        "provider/index.html";
+
+    }
+
+
+});
 
     /* ================================
        Receiver Button
