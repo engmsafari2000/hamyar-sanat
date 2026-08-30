@@ -59,8 +59,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     "provider/index.html";
 
                 }
+                else{
 
-                window.location.href = "provider/index.html";
+
+                  window.location.href = "provider/index.html";
+
+
+                }
+                
 
 
 
