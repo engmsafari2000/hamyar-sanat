@@ -17,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ================================
    Provider Button
 ================================ */
+```javascript
+/* ================================
+   Provider Button
+================================ */
 
 const providerBtn =
     document.getElementById("providerBtn");
@@ -24,73 +28,56 @@ const providerBtn =
 
 providerBtn.addEventListener("click", function () {
 
-
     console.log("Provider selected");
 
 
-    // لرزش کوتاه ایتا
-    if(window.Eitaa && Eitaa.WebApp){
+    if (window.Eitaa && Eitaa.WebApp) {
 
-
+        // لرزش
         Eitaa.WebApp.HapticFeedback
-        .impactOccurred("light");
+            .impactOccurred("light");
 
 
-        // درخواست شماره تلفن فقط برای خدمات دهنده
-
+        // درخواست شماره تماس
         Eitaa.WebApp.requestContact(
-
-            function(contact){
-
+            function (success, contact) {
 
                 console.log(
-                    "Contact:",
+                    "Contact success:",
+                    success
+                );
+
+                console.log(
+                    "Contact data:",
                     contact
                 );
 
 
-                /*
-                  ذخیره شماره موبایل ایتا
-                  برای صفحه فرم خدمات دهنده
-                */
+                if (success) {
 
-
-                if(contact && contact.phone_number){
-
-
+                    // ذخیره کل اطلاعات تماس
                     localStorage.setItem(
-                        "providerPhone",
-                        contact.phone_number
+                        "eitaaContact",
+                        JSON.stringify(contact)
                     );
 
 
                     // رفتن به فرم خدمات دهنده
-
                     window.location.href =
-                    "provider/index.html";
+                        "provider/index.html";
 
+                } else {
 
-                }
-
-                else {
-
-                     window.location.href ="provider/index.html";
-
-                  //Eitaa.WebApp.showAlert(
-                  //  "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
-                  //  );
-
+                    Eitaa.WebApp.showAlert(
+                        "دریافت شماره تلفن لغو شد."
+                    );
 
                 }
-
 
             }
-
         );
 
-
     }
-
 
 });
 
@@ -154,5 +141,7 @@ providerBtn.addEventListener("click", function () {
         }
 
     });
+
+
 
 });
