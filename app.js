@@ -76,13 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    else {
-
-        window.location.href =
-        "provider/index.html";
-
-    }
-
+    
 
 });
 
