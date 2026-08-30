@@ -22,69 +22,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const providerBtn =
         document.getElementById("providerBtn");
 
-   providerBtn.addEventListener("click", function () {
+    providerBtn.addEventListener("click", function () {
 
+        console.log("Provider selected");
 
-    console.log("Provider selected");
+        // Haptic feedback
+        if (window.Eitaa && Eitaa.WebApp) {
 
+            Eitaa.WebApp.HapticFeedback.impactOccurred(
+                "light"
+            );
+        }
 
-    // لرزش کوتاه ایتا
-    if(window.Eitaa && Eitaa.WebApp){
+        // For now:
+        // Go to provider chatbot
 
-        Eitaa.WebApp.HapticFeedback
-        .impactOccurred("light");
+        window.location.href = "provider/index.html";
+    });
 
-
-        // درخواست شماره تلفن فقط برای خدمات دهنده
-
-        Eitaa.WebApp.requestContact(
-            function(status){
-
-
-                console.log(
-                    "Contact status:",
-                    status
-                );
-
-
-                /*
-                  اگر کاربر اجازه داد
-                  وارد بخش خدمات دهنده شود
-                */
-
-                if(status === "sent"){
-
-
-                    window.location.href =
-                    "provider/index.html";
-
-                }
-                else{
-
-
-                  window.location.href = "provider/index.html";
-
-
-                }
-                
-
-
-
-            }
-        );
-
-
-    }
-
-    else {
-
-        window.location.href =
-        "provider/index.html";
-
-    }
-
-
-});
 
     /* ================================
        Receiver Button
