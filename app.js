@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
    Provider Button
 ================================ */
 
+
 const providerBtn =
     document.getElementById("providerBtn");
 
@@ -60,22 +61,36 @@ providerBtn.addEventListener("click", function () {
 
 
                 // اگر کاربر شماره را تأیید کرد
-                if (success) {
+                if (
+                    success &&
+                    contactData.responseUnsafe &&
+                    contactData.responseUnsafe.contact &&
+                    contactData.responseUnsafe.contact.phone
+                ) {
 
-                    /*
-                     * فعلاً کل contactData را ذخیره می‌کنیم
-                     * تا ساختار دقیق اطلاعات ایتا مشخص شود.
-                     */
+                    // استخراج شماره موبایل
+                    const phoneNumber =
+                        contactData.responseUnsafe.contact.phone;
 
-                    localStorage.setItem(
-                        "eitaaContact",
-                        JSON.stringify(contactData)
+
+                    // نمایش شماره در Console
+                    console.log(
+                        "Phone number:",
+                        phoneNumber
                     );
 
 
+                    // ذخیره شماره موبایل
+                    localStorage.setItem(
+                        "eitaaPhone",
+                        phoneNumber
+                    );
+
+
+                    // بررسی شماره ذخیره‌شده
                     console.log(
-                        "Saved contact:",
-                        localStorage.getItem("eitaaContact")
+                        "Saved phone:",
+                        localStorage.getItem("eitaaPhone")
                     );
 
 
@@ -84,7 +99,6 @@ providerBtn.addEventListener("click", function () {
                         "provider/index.html";
 
                 }
-
                 else {
 
                     Eitaa.WebApp.showAlert(
@@ -100,6 +114,8 @@ providerBtn.addEventListener("click", function () {
     }
 
 });
+
+
 
 
     /* ================================
