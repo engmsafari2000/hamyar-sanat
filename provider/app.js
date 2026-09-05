@@ -160,18 +160,7 @@ activitySelect.addEventListener(
                 </h3>
 
 
-                <div class="form-group">
 
-                    <label>
-                        توضیحات تکمیلی از نوع خدمات
-                    </label>
-
-                    <textarea
-                        name="serviceDescription"
-                        placeholder="جزئیات خدمات صنعتی..."
-                    ></textarea>
-
-                </div>
 
 
                 <div class="form-group">
