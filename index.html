@@ -35,80 +35,171 @@
 
 
         <!-- Main Content -->
-        <main class="main">
+<main class="main">
 
-            <div class="welcome">
-                <h2>خوش آمدید</h2>
+    <!-- Home Section -->
+    <section id="home-section">
+
+        <div class="welcome">
+            <h2>خوش آمدید</h2>
+            <p>
+                لطفاً نوع خدمت موردنظر خود را انتخاب کنید.
+            </p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="services">
+
+            <button
+                class="service-button provider"
+                id="providerBtn"
+                type="button">
+
+                <span class="button-icon">🏭</span>
+
+                <span class="button-content">
+                    <strong>خدمات دهنده</strong>
+                    <small>ثبت آگهی خدماتی</small>
+                </span>
+
+                <span class="arrow">←</span>
+            </button>
+
+
+            <button
+                class="service-button receiver"
+                id="receiverBtn"
+                type="button">
+
+                <span class="button-icon">🔍</span>
+
+                <span class="button-content">
+                    <strong>خدمات گیرنده</strong>
+                    <small>جستجو واحدهای خدماتی</small>
+                </span>
+
+                <span class="arrow">←</span>
+            </button>
+
+
+            <button
+                class="service-button support"
+                id="supportBtn"
+                type="button">
+
+                <span class="button-icon">💬</span>
+
+                <span class="button-content">
+                    <strong>خرید و فروش دستگاه</strong>
+                    <small>ثبت آگهی خرید و فروش دستگاه</small>
+                </span>
+
+                <span class="arrow">←</span>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- Chat Section -->
+    <section id="chat-section" style="display: none;">
+
+        <div class="chat-header">
+            <button id="backBtn" type="button">← بازگشت</button>
+
+            <h2>🤖 دستیار هوشمند همیار صنعت</h2>
+        </div>
+
+        <div id="chat-messages" class="chat-messages">
+
+            <div class="bot-message">
+                <strong>🤖 همیار صنعت</strong>
 
                 <p>
-                    لطفاً نوع خدمت موردنظر خود را انتخاب کنید.
+                    سلام! من دستیار هوش مصنوعی همیار صنعت هستم.
+                    <br>
+                    لطفاً سؤال یا خدمت موردنظر خود را برای من بنویسید.
                 </p>
             </div>
 
+        </div>
 
-            <!-- Buttons -->
-            <div class="services">
+        <div class="chat-input-area">
 
-                <button
-                    class="service-button provider"
-                    id="providerBtn"
-                    type="button">
+            <input
+                type="text"
+                id="chatInput"
+                placeholder="سؤال یا خدمت موردنظر خود را بنویسید..."
+                autocomplete="off">
 
-                    <span class="button-icon">🏭</span>
+            <button
+                id="sendBtn"
+                type="button">
+                ارسال
+            </button>
 
-                    <span class="button-content">
-                        <strong>خدمات دهنده</strong>
-                        <small>
-                           ثبت آگهی خدماتی
-                        </small>
-                    </span>
+        </div>
 
-                    <span class="arrow">←</span>
-
-                </button>
+    </section>
 
 
-                <button
-                    class="service-button receiver"
-                    id="receiverBtn"
-                    type="button">
+    <section id="chat-section" style="display: none;">
 
-                    <span class="button-icon">🔍</span>
+    <div class="chat-header">
 
-                    <span class="button-content">
-                        <strong>خدمات گیرنده</strong>
-                        <small>
-                            جستجو واحدهای خدماتی
-                        </small>
-                    </span>
+        <button id="backBtn" type="button">
+            ← بازگشت
+        </button>
 
-                    <span class="arrow">←</span>
+        <h2>
+            🤖 دستیار هوشمند همیار صنعت
+        </h2>
 
-                </button>
+    </div>
 
 
-                <button
-                    class="service-button support"
-                    id="supportBtn"
-                    type="button">
+    <div id="chat-messages" class="chat-messages">
 
-                    <span class="button-icon">💬</span>
+        <div class="bot-message">
 
-                    <span class="button-content">
-                        <strong>خرید و فروش دستگاه</strong>
-                        <small>
-                           ثبت آگهی خرید و فروش دستگاه
-                        </small>
-                    </span>
+            <strong>
+                🤖 همیار صنعت
+            </strong>
 
-                    <span class="arrow">←</span>
+            <p>
+                سلام! من دستیار هوش مصنوعی همیار صنعت هستم.
+                <br>
+                لطفاً سؤال یا خدمت موردنظر خود را برای من بنویسید.
+            </p>
 
-                </button>
+        </div>
 
-            </div>
+    </div>
 
-        </main>
 
+    <div class="chat-input-area">
+
+        <input
+            type="text"
+            id="chatInput"
+            placeholder="سؤال یا خدمت موردنظر خود را بنویسید..."
+            autocomplete="off"
+        >
+
+        <button
+            id="sendBtn"
+            type="button">
+            ارسال
+        </button>
+
+    </div>س
+
+</section>
+
+
+
+</main>
 
         <!-- Footer -->
         <footer class="footer">
