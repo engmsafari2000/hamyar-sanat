@@ -134,7 +134,7 @@ providerBtn.addEventListener("click", function () {
         // For now:
         // Go to receiver chatbot
 
-        //Eitaa.WebApp.openLink("https://example.com");
+        Eitaa.WebApp.openLink("https://safari2000.app.n8n.cloud/webhook/b88c8ce3-cd5c-4266-8d43-9f23591c4b21/chat");
 
         window.location.href = "receiver.html";
     });
