@@ -18,13 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
    Provider Button
 ================================ */
 
-/* ================================
-   Provider Button
-================================ */
 
-/* ================================
-   Provider Button
-================================ */
 
 
 const providerBtn =
@@ -140,6 +134,8 @@ providerBtn.addEventListener("click", function () {
         // For now:
         // Go to receiver chatbot
 
+        //Eitaa.WebApp.openLink("https://example.com");
+
         window.location.href = "receiver.html";
     });
 
@@ -167,13 +163,13 @@ providerBtn.addEventListener("click", function () {
              */
 
             Eitaa.WebApp.showAlert(
-                "بخش پشتیبانی به‌زودی فعال خواهد شد."
+                "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است."
             );
 
         } else {
 
             alert(
-                "بخش پشتیبانی به‌زودی فعال خواهد شد."
+                "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است."
             );
         }
 
