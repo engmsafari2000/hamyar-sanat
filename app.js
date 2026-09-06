@@ -147,7 +147,7 @@ receiverBtn.addEventListener("click", function () {
 
 // n8n Chat Webhook URL
 const N8N_CHAT_URL =
-    "https://safari2000.app.n8n.cloud/webhook/b88c8ce3-cd5c-4266-8d43-9f23591c4b21/chat";
+    "https://rasoul2000.app.n8n.cloud/webhook/bd1b9c4b-ca4f-477e-8457-3b3203a970ad/chat";
 
 
 // عناصر چت
