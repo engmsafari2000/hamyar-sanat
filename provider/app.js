@@ -12,20 +12,21 @@ const form =
 
 const WebApp = window.Eitaa?.WebApp;
 
-const WebApp = window.Eitaa?.WebApp;
+// =====================================
+// Eitaa Back Button
+// =====================================
 
-if (WebApp) {
-  WebApp.ready();
-  WebApp.expand();
+const backButton = WebApp?.BackButton;
 
-  // نمایش دکمه برگشت در هدر Web App ایتا
-  WebApp.BackButton.show();
-
-  // عملکرد دکمه برگشت
-  WebApp.BackButton.onClick(function () {
+function goBack() {
     window.history.back();
-  });
 }
+
+if (backButton) {
+    backButton.show();
+    backButton.onClick(goBack);
+}
+
 
 // =====================================
 // Modal Elements
