@@ -30,7 +30,6 @@ if (backButton) {
 // =====================================
 // Get Eitaa Phone Number
 // =====================================
-
 let eitaaPhone = null;
 
 if (WebApp) {
@@ -38,26 +37,28 @@ if (WebApp) {
 
         if (isOk && data.response) {
 
-            eitaaPhone = data.response;
+            const params = new URLSearchParams(data.response);
 
-            console.log(
-                "Eitaa phone:",
-                eitaaPhone
-            );
+            const contactJSON = params.get("contact");
+
+            if (contactJSON) {
+                const contact = JSON.parse(
+                    decodeURIComponent(contactJSON)
+                );
+
+                eitaaPhone = contact.phone;
+
+                console.log("Eitaa phone:", eitaaPhone);
+            }
 
         } else {
-
-            console.log(
-                "User did not share phone number."
-            );
-
+            console.log("User did not share phone number.");
         }
 
     });
 }
 
-console.log("Contact data:", data);
-console.log("Phone response:", data.response);
+eitaaPhone = contact.phone;
 
 // =====================================
 // Modal Elements
@@ -78,35 +79,7 @@ const modalMessage =
 const modalCloseBtn =
     document.getElementById("modalCloseBtn");
 
-// =====================================
-// Load hidden Eitaa phone
-// =====================================
 
-
-// =====================================
-// Get Eitaa Contact Data
-// =====================================
-
-const eitaaPhoneInput =
-    document.getElementById("eitaaPhone");
-
-
-const savedContact =
-    localStorage.getItem("eitaaContact");
-
-
-if (savedContact) {
-
-    const contactData =
-        JSON.parse(savedContact);
-
-
-    console.log(
-        "Eitaa contact in provider page:",
-        contactData
-    );
-
-}
 
 
 
@@ -323,14 +296,15 @@ form.addEventListener(
         // ===============================
 
         const formData =
-            new FormData(form);
-
+        new FormData(form);
 
         const data =
-            Object.fromEntries(
-                formData.entries()
-            );
+        Object.fromEntries(
+        formData.entries()
+        );
 
+    // افزودن شماره Eitaa به اطلاعات ارسالی
+    data.eitaaPhone = eitaaPhone;
 
         console.log(
             "اطلاعات ارسال شده:",
