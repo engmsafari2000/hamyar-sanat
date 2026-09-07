@@ -27,6 +27,37 @@ if (backButton) {
     backButton.onClick(goBack);
 }
 
+// =====================================
+// Get Eitaa Phone Number
+// =====================================
+
+let eitaaPhone = null;
+
+if (WebApp) {
+    WebApp.requestContact((isOk, data) => {
+
+        if (isOk && data.response) {
+
+            eitaaPhone = data.response;
+
+            console.log(
+                "Eitaa phone:",
+                eitaaPhone
+            );
+
+        } else {
+
+            console.log(
+                "User did not share phone number."
+            );
+
+        }
+
+    });
+}
+
+console.log("Contact data:", data);
+console.log("Phone response:", data.response);
 
 // =====================================
 // Modal Elements
