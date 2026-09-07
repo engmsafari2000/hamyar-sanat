@@ -4,286 +4,336 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    //* =================================
-       Eitaa WebApp
-    ================================= */
+    // Check if Eitaa WebApp is available
+    if (window.Eitaa && Eitaa.WebApp) {
 
-    const WebApp = window.Eitaa?.WebApp;
+        // Tell Eitaa that the Web App is ready
+        Eitaa.WebApp.ready();
 
-    // Initialize Eitaa WebApp
-    if (WebApp) {
-        WebApp.ready();
-        WebApp.expand();
-
-        // Back Button must be hidden on the main page
-        WebApp.BackButton.hide();
+        // Expand the Web App
+        Eitaa.WebApp.expand();
     }
 
-    /*
-       When the main page is restored from browser BFCache,
-       DOMContentLoaded may not run again.
-       pageshow guarantees that the Back Button is hidden.
-    */
-    window.addEventListener("pageshow", function () {
-        WebApp?.BackButton.hide();
-    });
+    WebApp?.BackButton.hide();
+/* ================================
+   Provider Button
+================================ */
 
 
-    /* =================================
-       Provider Button
-    ================================= */
 
-    const providerBtn = document.getElementById("providerBtn");
 
-    if (providerBtn) {
-        providerBtn.addEventListener("click", function () {
+const providerBtn =
+    document.getElementById("providerBtn");
 
-            console.log("Provider selected");
 
-            if (WebApp) {
-                WebApp.HapticFeedback.impactOccurred("light");
+providerBtn.addEventListener("click", function () {
+
+    console.log("Provider selected");
+
+
+    // بررسی وجود Eitaa WebApp
+    if (window.Eitaa && Eitaa.WebApp) {
+
+        // لرزش کوتاه
+        Eitaa.WebApp.HapticFeedback
+            .impactOccurred("light");
+
+
+        // درخواست شماره موبایل
+        Eitaa.WebApp.requestContact(
+
+            function (success, contactData) {
+
+                console.log(
+                    "Contact success:",
+                    success
+                );
+
+                console.log(
+                    "Contact data:",
+                    contactData
+                );
+
+
+                // اگر کاربر شماره را تأیید کرد
+                if (
+                    success &&
+                    contactData.responseUnsafe &&
+                    contactData.responseUnsafe.contact &&
+                    contactData.responseUnsafe.contact.phone
+                ) {
+
+                    // استخراج شماره موبایل
+                    const phoneNumber =
+                        contactData.responseUnsafe.contact.phone;
+
+
+                    // نمایش شماره در Console
+                    console.log(
+                        "Phone number:",
+                        phoneNumber
+                    );
+
+
+                    // ذخیره شماره موبایل
+                    localStorage.setItem(
+                        "eitaaPhone",
+                        phoneNumber
+                    );
+
+
+                    // بررسی شماره ذخیره‌شده
+                    console.log(
+                        "Saved phone:",
+                        localStorage.getItem("eitaaPhone")
+                    );
+
+
+                    // رفتن به فرم خدمات‌دهنده
+                    window.location.href =
+                        "provider/index.html";
+
+                }
+                else {
+
+                    Eitaa.WebApp.showAlert(
+                        "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
+                    );
+
+                }
+
             }
 
-            // Go to provider page
-            window.location.href = "provider/index.html";
-        });
+        );
+
     }
 
+});
 
-    /* =================================
+
+/* ================================
        Receiver Button
-    ================================= */
+   ================================= */
 
-    const receiverBtn = document.getElementById("receiverBtn");
+const receiverBtn = document.getElementById("receiverBtn");
 
-    if (receiverBtn) {
-        receiverBtn.addEventListener("click", function () {
+receiverBtn.addEventListener("click", function () {
 
-            console.log("Receiver selected");
+    console.log("Receiver selected");
 
-            if (WebApp) {
-                WebApp.HapticFeedback.impactOccurred("light");
-            }
-
-            const homeSection =
-                document.getElementById("home-section");
-
-            const chatSection =
-                document.getElementById("chat-section");
-
-            if (homeSection) {
-                homeSection.style.display = "none";
-            }
-
-            if (chatSection) {
-                chatSection.style.display = "block";
-            }
-        });
+    // Haptic feedback
+    if (window.Eitaa && Eitaa.WebApp) {
+        Eitaa.WebApp.HapticFeedback.impactOccurred("light");
     }
 
+    // Hide home section
+    const homeSection = document.getElementById("home-section");
 
-    /* =================================
+    if (homeSection) {
+        homeSection.style.display = "none";
+    }
+
+    // Show chat section
+    const chatSection = document.getElementById("chat-section");
+
+    if (chatSection) {
+        chatSection.style.display = "block";
+    }
+
+});
+
+/* ================================
        AI Chat - n8n Connection
-    ================================= */
+   ================================= */
 
-    const N8N_CHAT_URL =
-        "https://rasoul2000.app.n8n.cloud/webhook/bd1b9c4b-ca4f-477e-8457-3b3203a970ad/chat";
+// n8n Chat Webhook URL
+const N8N_CHAT_URL =
 
-    const chatInput =
-        document.getElementById("chatInput");
-
-    const sendBtn =
-        document.getElementById("sendBtn");
-
-    const chatMessages =
-        document.getElementById("chat-messages");
-
-    const backBtn =
-        document.getElementById("backBtn");
+    "https://rasoul2000.app.n8n.cloud/webhook/bd1b9c4b-ca4f-477e-8457-3b3203a970ad/chat";
 
 
-    /* =================================
-       Session ID
-    ================================= */
+// عناصر چت
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+const chatMessages = document.getElementById("chat-messages");
+const backBtn = document.getElementById("backBtn");
 
-    let sessionId =
-        localStorage.getItem("hamyar_sanat_session_id");
 
-    if (!sessionId) {
+// شناسه جلسه کاربر
+// برای اینکه n8n بتواند مکالمه کاربر را از هم تفکیک کند
+let sessionId = localStorage.getItem("hamyar_sanat_session_id");
 
-        sessionId =
-            "user_" +
-            Date.now() +
-            "_" +
-            Math.random()
-                .toString(36)
-                .substring(2, 10);
+if (!sessionId) {
 
-        localStorage.setItem(
-            "hamyar_sanat_session_id",
-            sessionId
+    sessionId =
+        "user_" +
+        Date.now() +
+        "_" +
+        Math.random().toString(36).substring(2, 10);
+
+    localStorage.setItem(
+        "hamyar_sanat_session_id",
+        sessionId
+    );
+}
+
+
+/* ================================
+       نمایش پیام در چت
+   ================================= */
+
+function addMessage(message, type) {
+
+    const messageDiv = document.createElement("div");
+
+    messageDiv.classList.add(
+        type === "user"
+            ? "user-message"
+            : "bot-message"
+    );
+
+    if (type === "user") {
+
+        messageDiv.innerHTML = `
+            <p>${escapeHtml(message)}</p>
+        `;
+
+    } else {
+
+        messageDiv.innerHTML = `
+            <strong>🤖 همیار صنعت</strong>
+            <p>${formatBotMessage(message)}</p>
+        `;
+
+    }
+
+    chatMessages.appendChild(messageDiv);
+
+    // رفتن به آخرین پیام
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+}
+
+
+/* ================================
+       جلوگیری از HTML Injection
+   ================================= */
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+/* ================================
+       قالب‌بندی پاسخ AI
+   ================================= */
+
+function formatBotMessage(message) {
+
+    if (!message) {
+        return "";
+    }
+
+    return escapeHtml(message)
+        .replace(/\n/g, "<br>");
+}
+
+
+/* ================================
+       نمایش وضعیت در حال پردازش
+   ================================= */
+
+function showTyping() {
+
+    const typingDiv =
+        document.createElement("div");
+
+    typingDiv.id = "typing-message";
+
+    typingDiv.classList.add("bot-message");
+
+    typingDiv.innerHTML = `
+        <strong>🤖 همیار صنعت</strong>
+        <p>در حال بررسی درخواست شما...</p>
+    `;
+
+    chatMessages.appendChild(typingDiv);
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+}
+
+
+/* ================================
+       حذف وضعیت پردازش
+   ================================= */
+
+function hideTyping() {
+
+    const typing =
+        document.getElementById(
+            "typing-message"
         );
+
+    if (typing) {
+        typing.remove();
+    }
+}
+
+
+/* ================================
+       ارسال پیام به n8n
+   ================================= */
+
+async function sendMessage() {
+
+    const message =
+        chatInput.value.trim();
+
+    // اگر چیزی وارد نشده
+    if (!message) {
+        return;
     }
 
 
-    /* =================================
-       Add Message
-    ================================= */
+    // نمایش پیام کاربر
+    addMessage(
+        message,
+        "user"
+    );
 
-    function addMessage(message, type) {
 
-        if (!chatMessages) {
-            return;
-        }
+    // پاک کردن Input
+    chatInput.value = "";
 
-        const messageDiv =
-            document.createElement("div");
 
-        messageDiv.classList.add(
-            type === "user"
-                ? "user-message"
-                : "bot-message"
+    // غیرفعال کردن دکمه
+    sendBtn.disabled = true;
+
+    sendBtn.textContent = "در حال ارسال...";
+
+
+    // نمایش Loading
+    showTyping();
+
+
+    try {
+
+        console.log(
+            "Sending message to n8n:",
+            message
         );
 
-        if (type === "user") {
 
-            messageDiv.innerHTML =
-                `<p>${escapeHtml(message)}</p>`;
-
-        } else {
-
-            messageDiv.innerHTML =
-                `<strong>🤖 همیار صنعت</strong>
-                 <p>${formatBotMessage(message)}</p>`;
-        }
-
-        chatMessages.appendChild(messageDiv);
-
-        chatMessages.scrollTop =
-            chatMessages.scrollHeight;
-    }
-
-
-    /* =================================
-       Escape HTML
-    ================================= */
-
-    function escapeHtml(text) {
-
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            text ?? "";
-
-        return div.innerHTML;
-    }
-
-
-    /* =================================
-       Format Bot Message
-    ================================= */
-
-    function formatBotMessage(message) {
-
-        if (!message) {
-            return "";
-        }
-
-        return escapeHtml(message)
-            .replace(/\n/g, "<br>");
-    }
-
-
-    /* =================================
-       Typing Indicator
-    ================================= */
-
-    function showTyping() {
-
-        if (!chatMessages) {
-            return;
-        }
-
-        // Prevent duplicate typing indicators
-        if (document.getElementById("typing-message")) {
-            return;
-        }
-
-        const typingDiv =
-            document.createElement("div");
-
-        typingDiv.id =
-            "typing-message";
-
-        typingDiv.classList.add(
-            "bot-message"
-        );
-
-        typingDiv.innerHTML =
-            `<strong>🤖 همیار صنعت</strong>
-             <p>در حال بررسی درخواست شما...</p>`;
-
-        chatMessages.appendChild(typingDiv);
-
-        chatMessages.scrollTop =
-            chatMessages.scrollHeight;
-    }
-
-
-    /* =================================
-       Hide Typing Indicator
-    ================================= */
-
-    function hideTyping() {
-
-        const typing =
-            document.getElementById(
-                "typing-message"
-            );
-
-        if (typing) {
-            typing.remove();
-        }
-    }
-
-
-    /* =================================
-       Send Message
-    ================================= */
-
-    async function sendMessage() {
-
-        if (!chatInput || !sendBtn) {
-            return;
-        }
-
-        const message =
-            chatInput.value.trim();
-
-        if (!message) {
-            return;
-        }
-
-        addMessage(message, "user");
-
-        chatInput.value = "";
-
-        sendBtn.disabled = true;
-        sendBtn.textContent =
-            "در حال ارسال...";
-
-        showTyping();
-
-        try {
-
-            console.log(
-                "Sending message to n8n:",
-                message
-            );
-
-            const response =
-                await fetch(N8N_CHAT_URL, {
+        const response =
+            await fetch(
+                N8N_CHAT_URL,
+                {
                     method: "POST",
 
                     headers: {
@@ -292,224 +342,229 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
 
                     body: JSON.stringify({
+
                         chatInput: message,
+
                         sessionId: sessionId
+
                     })
-                });
+                }
+            );
 
 
-            console.log(
-                "n8n response status:",
+        console.log(
+            "n8n response status:",
+            response.status
+        );
+
+
+        // بررسی خطای HTTP
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP Error: " +
                 response.status
             );
 
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "HTTP Error: " +
-                    response.status
-                );
-            }
+        }
 
 
-            const data =
-                await response.json();
+        // دریافت پاسخ
+        const data =
+            await response.json();
 
 
-            console.log(
-                "n8n response:",
-                data
-            );
+        console.log(
+            "n8n response:",
+            data
+        );
 
 
-            hideTyping();
+        // حذف Loading
+        hideTyping();
 
 
-            /*
-               n8n may return the response
-               under different property names.
-            */
-            const botResponse =
-                data.output ||
-                data.text ||
-                data.response ||
-                data.message ||
-                data.answer;
+        /*
+         * n8n ممکن است پاسخ را
+         * در یکی از این فیلدها برگرداند.
+         */
+
+        const botResponse =
+            data.output ||
+            data.text ||
+            data.response ||
+            data.message ||
+            data.answer;
 
 
-            if (botResponse) {
-
-                addMessage(
-                    botResponse,
-                    "bot"
-                );
-
-            } else {
-
-                addMessage(
-                    "پاسخی از دستیار دریافت نشد.",
-                    "bot"
-                );
-
-                console.log(
-                    "Unknown n8n response:",
-                    data
-                );
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                "n8n connection error:",
-                error
-            );
-
-            hideTyping();
+        if (botResponse) {
 
             addMessage(
-                "⚠️ در ارتباط با دستیار هوشمند مشکلی ایجاد شد. لطفاً دوباره تلاش کنید.",
+                botResponse,
                 "bot"
             );
 
-        } finally {
+        } else {
 
-            sendBtn.disabled = false;
+            addMessage(
+                "پاسخی از دستیار دریافت نشد.",
+                "bot"
+            );
 
-            sendBtn.textContent =
-                "ارسال";
+            console.log(
+                "Unknown n8n response:",
+                data
+            );
+
         }
-    }
 
 
-    /* =================================
-       Send Button
-    ================================= */
+    } catch (error) {
 
-    if (sendBtn) {
-
-        sendBtn.addEventListener(
-            "click",
-            sendMessage
+        console.error(
+            "n8n connection error:",
+            error
         );
-    }
 
 
-    /* =================================
-       Enter Key
-    ================================= */
+        // حذف Loading
+        hideTyping();
 
-    if (chatInput) {
 
-        chatInput.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key === "Enter" &&
-                    !event.shiftKey
-                ) {
-
-                    event.preventDefault();
-
-                    sendMessage();
-                }
-            }
+        addMessage(
+            "⚠️ در ارتباط با دستیار هوشمند مشکلی ایجاد شد. لطفاً دوباره تلاش کنید.",
+            "bot"
         );
+
     }
 
 
-    /* =================================
-       Internal Chat Back Button
-       
-       IMPORTANT:
-       This is NOT Eitaa's native
-       WebApp.BackButton.
-    ================================= */
+    // فعال کردن دکمه
+    sendBtn.disabled = false;
 
-    if (backBtn) {
-
-        backBtn.addEventListener(
-            "click",
-            function () {
-
-                if (WebApp) {
-
-                    WebApp.HapticFeedback
-                        .impactOccurred("light");
-                }
+    sendBtn.textContent = "ارسال";
+}
 
 
-                const chatSection =
-                    document.getElementById(
-                        "chat-section"
-                    );
+/* ================================
+       کلیک روی دکمه ارسال
+   ================================= */
 
-                const homeSection =
-                    document.getElementById(
-                        "home-section"
-                    );
-
-
-                if (chatSection) {
-
-                    chatSection.style.display =
-                        "none";
-                }
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
 
 
-                if (homeSection) {
+/* ================================
+       ارسال با Enter
+   ================================= */
 
-                    homeSection.style.display =
-                        "block";
-                }
-            }
-        );
+chatInput.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
     }
+);
 
 
-    /* =================================
+/* ================================
+       دکمه بازگشت
+   ================================= */
+
+backBtn.addEventListener(
+    "click",
+    function () {
+
+        // Haptic feedback
+        if (
+            window.Eitaa &&
+            Eitaa.WebApp
+        ) {
+
+            Eitaa.WebApp
+                .HapticFeedback
+                .impactOccurred("light");
+
+        }
+
+
+        // مخفی کردن چت
+        const chatSection =
+            document.getElementById(
+                "chat-section"
+            );
+
+        if (chatSection) {
+
+            chatSection.style.display =
+                "none";
+
+        }
+
+
+        // نمایش صفحه اصلی
+        const homeSection =
+            document.getElementById(
+                "home-section"
+            );
+
+        if (homeSection) {
+
+            homeSection.style.display =
+                "block";
+
+        }
+
+    }
+);
+
+    /* ================================
        Support Button
     ================================= */
 
     const supportBtn =
-        document.getElementById(
-            "supportBtn"
-        );
+        document.getElementById("supportBtn");
+
+    supportBtn.addEventListener("click", function () {
+
+        console.log("Support selected");
+
+        if (window.Eitaa && Eitaa.WebApp) {
+
+            Eitaa.WebApp.HapticFeedback.impactOccurred(
+                "light"
+            );
+
+            /*
+             * Later we can replace this with
+             * the actual Eitaa support link.
+             */
+
+            Eitaa.WebApp.showAlert(
+                "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است."
+            );
+
+        } else {
+
+            alert(
+                "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است."
+            );
+        }
+
+    });
 
 
-    if (supportBtn) {
-
-        supportBtn.addEventListener(
-            "click",
-            function () {
-
-                console.log(
-                    "Support selected"
-                );
-
-
-                const message =
-                    "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است.";
-
-
-                if (WebApp) {
-
-                    WebApp.HapticFeedback
-                        .impactOccurred("light");
-
-                    WebApp.showAlert(
-                        message
-                    );
-
-                } else {
-
-                    alert(message);
-                }
-            }
-        );
-    }
 
 });
-```
