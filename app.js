@@ -13,11 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Expand the Web App
         Eitaa.WebApp.expand();
     }
-const WebApp = window.Eitaa?.WebApp;
 
-window.addEventListener("pageshow", function () {
     WebApp?.BackButton.hide();
-});
+
+
 /* ================================
    Provider Button
 ================================ */
@@ -42,72 +41,7 @@ providerBtn.addEventListener("click", function () {
             .impactOccurred("light");
 
 
-        // درخواست شماره موبایل
-        Eitaa.WebApp.requestContact(
-
-            function (success, contactData) {
-
-                console.log(
-                    "Contact success:",
-                    success
-                );
-
-                console.log(
-                    "Contact data:",
-                    contactData
-                );
-
-
-                // اگر کاربر شماره را تأیید کرد
-                if (
-                    success &&
-                    contactData.responseUnsafe &&
-                    contactData.responseUnsafe.contact &&
-                    contactData.responseUnsafe.contact.phone
-                ) {
-
-                    // استخراج شماره موبایل
-                    const phoneNumber =
-                        contactData.responseUnsafe.contact.phone;
-
-
-                    // نمایش شماره در Console
-                    console.log(
-                        "Phone number:",
-                        phoneNumber
-                    );
-
-
-                    // ذخیره شماره موبایل
-                    localStorage.setItem(
-                        "eitaaPhone",
-                        phoneNumber
-                    );
-
-
-                    // بررسی شماره ذخیره‌شده
-                    console.log(
-                        "Saved phone:",
-                        localStorage.getItem("eitaaPhone")
-                    );
-
-
-                    // رفتن به فرم خدمات‌دهنده
-                    window.location.href =
-                        "provider/index.html";
-
-                }
-                else {
-
-                    Eitaa.WebApp.showAlert(
-                        "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
-                    );
-
-                }
-
-            }
-
-        );
+        
 
     }
 
@@ -151,6 +85,7 @@ receiverBtn.addEventListener("click", function () {
 
 // n8n Chat Webhook URL
 const N8N_CHAT_URL =
+
     "https://rasoul2000.app.n8n.cloud/webhook/bd1b9c4b-ca4f-477e-8457-3b3203a970ad/chat";
 
 
