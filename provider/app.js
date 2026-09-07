@@ -10,6 +10,30 @@ const dynamicFields =
 const form =
     document.getElementById("serviceForm");
 
+const WebApp = window.Eitaa?.WebApp;
+
+if (WebApp) {
+  WebApp.ready();
+  WebApp.expand();
+
+  const isHomePage =
+    window.location.pathname.endsWith("/") ||
+    window.location.pathname.endsWith("/index.html");
+
+  if (isHomePage) {
+    WebApp.BackButton.hide();
+  } else {
+    WebApp.BackButton.show();
+
+    WebApp.BackButton.onClick(function () {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+  }
+}
 
 // =====================================
 // Modal Elements
