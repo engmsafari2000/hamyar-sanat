@@ -12,27 +12,19 @@ const form =
 
 const WebApp = window.Eitaa?.WebApp;
 
+const WebApp = window.Eitaa?.WebApp;
+
 if (WebApp) {
   WebApp.ready();
   WebApp.expand();
 
-  const isHomePage =
-    window.location.pathname.endsWith("/") ||
-    window.location.pathname.endsWith("/index.html");
+  // نمایش دکمه برگشت در هدر Web App ایتا
+  WebApp.BackButton.show();
 
-  if (isHomePage) {
-    WebApp.BackButton.hide();
-  } else {
-    WebApp.BackButton.show();
-
-    WebApp.BackButton.onClick(function () {
-      if (window.history.length > 1) {
-        window.history.back();
-      } else {
-        window.location.href = "index.html";
-      }
-    });
-  }
+  // عملکرد دکمه برگشت
+  WebApp.BackButton.onClick(function () {
+    window.history.back();
+  });
 }
 
 // =====================================
