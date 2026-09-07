@@ -40,7 +40,8 @@ providerBtn.addEventListener("click", function () {
         Eitaa.WebApp.HapticFeedback
             .impactOccurred("light");
 
-
+         window.location.href =
+              "provider/index.html";
         
 
     }
