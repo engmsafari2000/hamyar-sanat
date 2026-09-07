@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         Eitaa.WebApp.expand();
     }
 
-    WebApp?.BackButton.hide();
 /* ================================
    Provider Button
 ================================ */
