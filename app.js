@@ -13,7 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // Expand the Web App
         Eitaa.WebApp.expand();
     }
+const WebApp = window.Eitaa?.WebApp;
 
+window.addEventListener("pageshow", function () {
+    WebApp?.BackButton.hide();
+});
 /* ================================
    Provider Button
 ================================ */
