@@ -58,7 +58,7 @@ if (WebApp) {
     });
 }
 
-eitaaPhone = contact.phone;
+
 
 // =====================================
 // Modal Elements
