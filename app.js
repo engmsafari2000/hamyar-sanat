@@ -72,7 +72,7 @@ if (providerBtn) {
             if (WebApp) {
                 WebApp.HapticFeedback
                     .impactOccurred("light");
-            }س
+            }
 
             /*
                Temporary receiver page
