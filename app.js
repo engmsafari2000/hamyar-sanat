@@ -4,54 +4,58 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    //* =================================
-       Eitaa WebApp
-    ================================= */
+    // Check if Eitaa WebApp is available
+    if (window.Eitaa && Eitaa.WebApp) {
 
-    const WebApp = window.Eitaa?.WebApp;
+        // Tell Eitaa that the Web App is ready
+        Eitaa.WebApp.ready();
 
-    // Initialize Eitaa WebApp
-    if (WebApp) {
-        WebApp.ready();
-        WebApp.expand();
-
-        // Back Button must be hidden on the main page
-        WebApp.BackButton.hide();
+        // Expand the Web App
+        Eitaa.WebApp.expand();
     }
 
-    /*
-       When the main page is restored from browser BFCache,
-       DOMContentLoaded may not run again.
-       pageshow guarantees that the Back Button is hidden.
-    */
+   const WebApp = window.Eitaa?.WebApp;
+
     window.addEventListener("pageshow", function () {
-        WebApp?.BackButton.hide();
+    WebApp?.BackButton.hide();
+});
+/* ================================
+   Provider Button
+================================ */
+
+
+
+
+/* =================================
+   Provider Button
+================================= */
+
+const providerBtn = document.getElementById("providerBtn");
+
+if (providerBtn) {
+
+    providerBtn.addEventListener("click", function () {
+
+        console.log("Provider selected");
+
+        // بررسی وجود Eitaa WebApp
+        if (window.Eitaa && window.Eitaa.WebApp) {
+
+            // لرزش کوتاه
+            window.Eitaa.WebApp.HapticFeedback
+                .impactOccurred("light");
+
+        }
+
+        // رفتن به صفحه Provider
+        window.location.href = "provider/index.html";
+
     });
 
-
-    /* =================================
-       Provider Button
-    ================================= */
-
-    const providerBtn = document.getElementById("providerBtn");
-
-    if (providerBtn) {
-        providerBtn.addEventListener("click", function () {
-
-            console.log("Provider selected");
-
-            if (WebApp) {
-                WebApp.HapticFeedback.impactOccurred("light");
-            }
-
-            // Go to provider page
-            window.location.href = "provider/index.html";
-        });
-    }
+}
 
 
-
-    /* =================================
+ /* =================================
        Receiver Button
     ================================= */
 
@@ -68,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (WebApp) {
                 WebApp.HapticFeedback
                     .impactOccurred("light");
-            }
+            }س
 
             /*
                Temporary receiver page
@@ -83,47 +87,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    /* =================================
+    /* ================================
        Support Button
     ================================= */
 
     const supportBtn =
-        document.getElementById(
-            "supportBtn"
-        );
+        document.getElementById("supportBtn");
+
+    supportBtn.addEventListener("click", function () {
+
+        console.log("Support selected");
+
+        if (window.Eitaa && Eitaa.WebApp) {
+
+            Eitaa.WebApp.HapticFeedback.impactOccurred(
+                "light"
+            );
+
+            /*
+             * Later we can replace this with
+             * the actual Eitaa support link.
+             */
+
+            Eitaa.WebApp.showAlert(
+                "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است."
+            );
+
+        } else {
+
+            alert(
+                "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است."
+            );
+        }
+
+    });
 
 
-    if (supportBtn) {
-
-        supportBtn.addEventListener(
-            "click",
-            function () {
-
-                console.log(
-                    "Support selected"
-                );
-
-
-                const message =
-                    "فعال‌سازی بخش «خرید و فروش دستگاه» نیازمند حمایت مالی و همراهی شما عزیزان است.";
-
-
-                if (WebApp) {
-
-                    WebApp.HapticFeedback
-                        .impactOccurred("light");
-
-                    WebApp.showAlert(
-                        message
-                    );
-
-                } else {
-
-                    alert(message);
-                }
-            }
-        );
-    }
 
 });
-```
