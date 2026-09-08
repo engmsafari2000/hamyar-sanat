@@ -18,102 +18,33 @@ const WebApp = window.Eitaa?.WebApp;
 window.addEventListener("pageshow", function () {
     WebApp?.BackButton.hide();
 });
-/* ================================
+/* =================================
    Provider Button
-================================ */
+================================= */
 
+const providerBtn = document.getElementById("providerBtn");
 
+if (providerBtn) {
 
+    providerBtn.addEventListener("click", function () {
 
-const providerBtn =
-    document.getElementById("providerBtn");
+        console.log("Provider selected");
 
+        // بررسی وجود Eitaa WebApp
+        if (window.Eitaa && window.Eitaa.WebApp) {
 
-providerBtn.addEventListener("click", function () {
+            // لرزش کوتاه
+            window.Eitaa.WebApp.HapticFeedback
+                .impactOccurred("light");
 
-    console.log("Provider selected");
+        }
 
+        // رفتن به صفحه Provider
+        window.location.href = "provider/index.html";
 
-    // بررسی وجود Eitaa WebApp
-    if (window.Eitaa && Eitaa.WebApp) {
+    });
 
-        // لرزش کوتاه
-        Eitaa.WebApp.HapticFeedback
-            .impactOccurred("light");
-
-
-        // درخواست شماره موبایل
-        Eitaa.WebApp.requestContact(
-
-            function (success, contactData) {
-
-                console.log(
-                    "Contact success:",
-                    success
-                );
-
-                console.log(
-                    "Contact data:",
-                    contactData
-                );
-
-
-                // اگر کاربر شماره را تأیید کرد
-                if (
-                    success &&
-                    contactData.responseUnsafe &&
-                    contactData.responseUnsafe.contact &&
-                    contactData.responseUnsafe.contact.phone
-                ) {
-
-                    // استخراج شماره موبایل
-                    const phoneNumber =
-                        contactData.responseUnsafe.contact.phone;
-
-
-                    // نمایش شماره در Console
-                    console.log(
-                        "Phone number:",
-                        phoneNumber
-                    );
-
-
-                    // ذخیره شماره موبایل
-                    localStorage.setItem(
-                        "eitaaPhone",
-                        phoneNumber
-                    );
-
-
-                    // بررسی شماره ذخیره‌شده
-                    console.log(
-                        "Saved phone:",
-                        localStorage.getItem("eitaaPhone")
-                    );
-
-
-                    // رفتن به فرم خدمات‌دهنده
-                    window.location.href =
-                        "provider/index.html";
-
-                }
-                else {
-
-                    Eitaa.WebApp.showAlert(
-                        "برای ثبت خدمات، تأیید شماره موبایل الزامی است."
-                    );
-
-                }
-
-            }
-
-        );
-
-    }
-
-});
-
-
+}
 /* ================================
        Receiver Button
    ================================= */
