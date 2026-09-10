@@ -8,7 +8,7 @@ const N8N_WEBHOOK_URL =
 
 // یک توکن ساده برای جلوگیری از سوءاستفاده از Webhook عمومی
 // (باید دقیقاً همین مقدار در n8n هم چک شود)
-const N8N_WEBHOOK_TOKEN = "https://rasoul2000.app.n8n.cloud/webhook-test/service-image";
+const N8N_WEBHOOK_TOKEN = "MySecret123456";
 
 // حداکثر حجم مجاز عکس (بایت) - اینجا ۵ مگابایت
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -320,7 +320,7 @@ async function uploadImageToN8n(file, submissionId) {
     );
 
     imageFormData.append(
-        "https://rasoul2000.app.n8n.cloud/webhook/service-image",
+        "MySecret123456",
         N8N_WEBHOOK_TOKEN
     );
 
