@@ -100,6 +100,7 @@
 
                 </div>
 
+
             </div>
 
 
@@ -204,13 +205,36 @@
 
 
 
+            <!-- آپلود عکس -->
+
+            <div class="form-group">
+
+                <label for="serviceImage">
+                    تصویر خدمات (اختیاری)
+                </label>
+
+                <input
+                    type="file"
+                    id="serviceImage"
+                    name="serviceImage"
+                    accept="image/*"
+                >
+
+                <small class="field-hint">
+                    فرمت مجاز: jpg, png — حداکثر حجم ۵ مگابایت
+                </small>
+
+            </div>
+
+
+
             <!-- Submit -->
 
             <button
                 type="submit"
                 class="submit-button"
             >
-                ثبت اطلاعات
+                <span id="submitBtnText">ثبت اطلاعات</span>
             </button>
 
 
