@@ -1,6 +1,18 @@
 const GOOGLE_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbySCRuX3dm0i6brTkRfJUSJnqhJCIbQ0fJ4olWrQA97M5oTr-yQXhboJZylinQxto2g5Q/exec";
 
+// آدرس Webhook مربوط به n8n برای دریافت عکس
+// این مقدار را با آدرس واقعی Webhook خودتان جایگزین کنید
+const N8N_WEBHOOK_URL =
+    "https://YOUR-N8N-DOMAIN/webhook/service-image";
+
+// یک توکن ساده برای جلوگیری از سوءاستفاده از Webhook عمومی
+// (باید دقیقاً همین مقدار در n8n هم چک شود)
+const N8N_WEBHOOK_TOKEN = "https://rasoul2000.app.n8n.cloud/webhook-test/service-image";
+
+// حداکثر حجم مجاز عکس (بایت) - اینجا ۵ مگابایت
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
 const activitySelect =
     document.getElementById("activity");
 
@@ -9,6 +21,15 @@ const dynamicFields =
 
 const form =
     document.getElementById("serviceForm");
+
+const serviceImageInput =
+    document.getElementById("serviceImage");
+
+const submitButton =
+    document.querySelector(".submit-button");
+
+const submitBtnText =
+    document.getElementById("submitBtnText");
 
 const WebApp = window.Eitaa?.WebApp;
 
@@ -57,8 +78,6 @@ if (WebApp) {
 
     });
 }
-
-
 
 // =====================================
 // Modal Elements
@@ -267,6 +286,87 @@ activitySelect.addEventListener(
 
 
 // =====================================
+// Generate Submission ID
+// =====================================
+// این شناسه در ردیف گوگل شیت و در پیلود عکس ارسالی
+// به n8n هر دو ثبت می‌شود تا بعداً بشود آن‌ها را به هم مرتبط کرد
+
+function generateSubmissionId() {
+
+    if (window.crypto && window.crypto.randomUUID) {
+        return window.crypto.randomUUID();
+    }
+
+    // fallback برای مرورگرهای قدیمی‌تر
+    return (
+        Date.now().toString(36) +
+        "-" +
+        Math.random().toString(36).slice(2, 10)
+    );
+}
+
+
+// =====================================
+// Upload Image To n8n Webhook
+// =====================================
+
+async function uploadImageToN8n(file, submissionId) {
+
+    const imageFormData = new FormData();
+
+    imageFormData.append(
+        "submissionId",
+        submissionId
+    );
+
+    imageFormData.append(
+        "token",
+        N8N_WEBHOOK_TOKEN
+    );
+
+    imageFormData.append(
+        "image",
+        file,
+        file.name
+    );
+
+    const response = await fetch(
+        N8N_WEBHOOK_URL,
+        {
+            method: "POST",
+            body: imageFormData
+            // توجه: هدر Content-Type را دستی ست نکنید،
+            // مرورگر خودش boundary مناسب multipart را اضافه می‌کند
+        }
+    );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "n8n webhook responded with status " +
+            response.status
+        );
+    }
+
+    return response;
+}
+
+
+// =====================================
+// Toggle Submit Button Loading State
+// =====================================
+
+function setSubmitLoading(isLoading) {
+
+    submitButton.disabled = isLoading;
+
+    submitBtnText.textContent = isLoading
+        ? "در حال ارسال..."
+        : "ثبت اطلاعات";
+}
+
+
+// =====================================
 // Submit Form
 // =====================================
 
@@ -292,6 +392,25 @@ form.addEventListener(
 
 
         // ===============================
+        // بررسی فایل عکس (در صورت انتخاب)
+        // ===============================
+
+        const imageFile =
+            serviceImageInput?.files?.[0] || null;
+
+        if (imageFile && imageFile.size > MAX_IMAGE_SIZE) {
+
+            showModal(
+                "warning",
+                "حجم فایل زیاد است",
+                "حجم تصویر باید کمتر از ۵ مگابایت باشد."
+            );
+
+            return;
+        }
+
+
+        // ===============================
         // دریافت اطلاعات فرم
         // ===============================
 
@@ -303,6 +422,13 @@ form.addEventListener(
         formData.entries()
         );
 
+        // شناسه یکتا برای اتصال ردیف گوگل شیت به عکس ارسالی در n8n
+        const submissionId = generateSubmissionId();
+        data.submissionId = submissionId;
+
+        // این فیلد فقط برای FormData لازم بود، در دیتای متنی نیازی نیست
+        delete data.serviceImage;
+
     // افزودن شماره Eitaa به اطلاعات ارسالی
     data.eitaaPhone = eitaaPhone;
 
@@ -310,6 +436,9 @@ form.addEventListener(
             "اطلاعات ارسال شده:",
             data
         );
+
+
+        setSubmitLoading(true);
 
 
         try {
@@ -337,6 +466,35 @@ form.addEventListener(
 
 
             // ===============================
+            // ارسال عکس به n8n (در صورت وجود)
+            // ===============================
+
+            let imageUploadFailed = false;
+
+            if (imageFile) {
+
+                try {
+
+                    await uploadImageToN8n(
+                        imageFile,
+                        submissionId
+                    );
+
+                }
+
+                catch (imageError) {
+
+                    console.error(
+                        "خطا در ارسال عکس به n8n:",
+                        imageError
+                    );
+
+                    imageUploadFailed = true;
+                }
+            }
+
+
+            // ===============================
             // بررسی زمینه فعالیت
             // ===============================
 
@@ -344,10 +502,22 @@ form.addEventListener(
                 activitySelect.value;
 
 
+            if (imageUploadFailed) {
+
+                // اطلاعات فرم ثبت شد ولی عکس ارسال نشد
+                showModal(
+                    "warning",
+                    "ثبت ناقص",
+                    "اطلاعات فرم با موفقیت ثبت شد، اما ارسال تصویر با خطا مواجه شد. لطفاً بعداً دوباره تصویر را ارسال کنید."
+                );
+
+            }
+
+
             // حالت سوم:
             // تراش و فرز
 
-            if (
+            else if (
                 selectedActivity === "machining"
             ) {
 
@@ -374,11 +544,14 @@ form.addEventListener(
             }
 
 
-            // پاک کردن فرم پس از ثبت
+            // پاک کردن فرم پس از ثبت (فقط در صورت موفقیت کامل)
 
-            form.reset();
+            if (!imageUploadFailed) {
 
-            dynamicFields.innerHTML = "";
+                form.reset();
+
+                dynamicFields.innerHTML = "";
+            }
 
         }
 
@@ -394,6 +567,11 @@ form.addEventListener(
                 "ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید."
             );
 
+        }
+
+        finally {
+
+            setSubmitLoading(false);
         }
 
     }
