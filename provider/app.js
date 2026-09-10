@@ -320,7 +320,7 @@ async function uploadImageToN8n(file, submissionId) {
     );
 
     imageFormData.append(
-        "MySecret123456",
+        "TOKEN",
         N8N_WEBHOOK_TOKEN
     );
 
