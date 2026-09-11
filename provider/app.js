@@ -356,13 +356,57 @@ async function uploadImageToN8n(file, submissionId) {
 // Toggle Submit Button Loading State
 // =====================================
 
+// =====================================
+// Toggle Submit Button Loading State (with Countdown)
+// =====================================
+
+let countdownInterval = null;
+
 function setSubmitLoading(isLoading) {
 
     submitButton.disabled = isLoading;
 
-    submitBtnText.textContent = isLoading
-        ? "در حال ارسال..."
-        : "ثبت اطلاعات";
+    // اگر شمارنده‌ی قبلی در حال اجراست، متوقفش کن
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+    }
+
+    if (isLoading) {
+
+        let secondsLeft = 20;
+
+        submitBtnText.textContent =
+            "در حال ارسال... (" + secondsLeft + ")";
+
+        countdownInterval = setInterval(function () {
+
+            secondsLeft--;
+
+            if (secondsLeft > 0) {
+
+                submitBtnText.textContent =
+                    "در حال ارسال... (" + secondsLeft + ")";
+
+            } else {
+
+                // اگر به صفر رسید ولی هنوز درخواست تمام نشده
+                submitBtnText.textContent =
+                    "در حال ارسال... لطفاً صبر کنید";
+
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+
+            }
+
+        }, 1000);
+
+    } else {
+
+        submitBtnText.textContent = "ثبت اطلاعات";
+
+    }
+
 }
 
 
