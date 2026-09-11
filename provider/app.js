@@ -1,5 +1,5 @@
 const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbySCRuX3dm0i6brTkRfJUSJnqhJCIbQ0fJ4olWrQA97M5oTr-yQXhboJZylinQxto2g5Q/exec";
+    "https://script.google.com/macros/s/AKfycbysw4z880hJMREDWHyAU_ExiFf2M4a6PyfqMOXIPkvG7zuSiiQeBwfcAnXffQHZ5P4e1Q/exec";
 
 // آدرس Webhook مربوط به n8n برای دریافت عکس
 // این مقدار را با آدرس واقعی Webhook خودتان جایگزین کنید
