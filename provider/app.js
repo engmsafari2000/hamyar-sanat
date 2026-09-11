@@ -4,7 +4,7 @@ const GOOGLE_SCRIPT_URL =
 // آدرس Webhook مربوط به n8n برای دریافت عکس
 // این مقدار را با آدرس واقعی Webhook خودتان جایگزین کنید
 const N8N_WEBHOOK_URL =
-    "https://rasoul2000.app.n8n.cloud/webhook-test/service-image";
+    "https://rasoul2000.app.n8n.cloud/webhook/service-image";
 
 // یک توکن ساده برای جلوگیری از سوءاستفاده از Webhook عمومی
 // (باید دقیقاً همین مقدار در n8n هم چک شود)
